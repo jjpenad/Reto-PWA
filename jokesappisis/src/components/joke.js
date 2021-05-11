@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react";
 
 const Joke = () => {
-  const [joke, setJoke] = useState();
+  const [jokes, setJokes] = useState();
 
   useEffect(() => {
     if (!navigator.onLine) {
       if (localStorage.getItem("joke") === null) {
-        setJoke("Loading...");
+        setJokes("Loading...");
       } else {
-        setJoke(localStorage.getItem("joke"));
+        setJokes(localStorage.getItem("joke"));
       }
     }
 
@@ -17,15 +17,28 @@ const Joke = () => {
     )
       .then((result) => result.json())
       .then((result) => {
-        setJoke(result.results);
-        console.log("Result", result.data);
+        setJokes(result.data.results);
+        console.log("Result", result.data.results);
       });
   }, []);
 
   return (
     <div>
-      <h1>Joke</h1>
-      <p>{joke}</p>
+      <h1>Marvel Universe</h1>
+      <p>
+        {Array.isArray(jokes) &&
+          jokes.map((j) => (
+            <div>
+              <h2>{j.name}</h2>
+              <img
+                alt='img'
+                src={j.thumbnail.path + "." + j.thumbnail.extension}
+                width='50%'
+                height='auto'
+              />
+            </div>
+          ))}
+      </p>
     </div>
   );
 };
